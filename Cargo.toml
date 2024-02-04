@@ -1,0 +1,25 @@
+[package]
+name = "pal-monitor"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+anyhow = "1.0.79"
+bollard = "0.15.0"
+poise = "0.6.1"
+tokio = { version = "1.36.0", default-features = false, features = [
+   "time",
+   "macros",
+   "rt-multi-thread",
+] }
+tracing = "0.1.40"
+itertools = "0.12.1"
+futures-util = "0.3.30"
+tracing-subscriber = "0.3.18"
+serde = "1.0.196"
+
+[target.'cfg(windows)'.dependencies]
+# TODO: Feature seems to be missing on windows
+winapi = { version = "0.3.9", features = ["winerror"] }
