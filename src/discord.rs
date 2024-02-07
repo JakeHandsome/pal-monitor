@@ -37,7 +37,9 @@ pub async fn create_client(discord_token: &str) -> Result<serenity::Client> {
 async fn status(ctx: Context<'_>) -> Result<(), Error> {
     info!("status command called by {}", ctx.author().name);
     ctx.defer().await?;
-    let server_running = docker::get_palworld_docker_container(None).await.is_ok();
+    let server_running = docker::get_palworld_docker_container(None)
+        .await?
+        .is_running();
     if server_running {
         if let Ok((players, count)) = docker::get_players().await {
             let memory = docker::get_memory_stats()?;
