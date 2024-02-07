@@ -1,4 +1,4 @@
-use crate::docker;
+use crate::docker::{self, get_palworld_docker_container, ContainerIsRunning};
 use anyhow::Result;
 use poise::serenity_prelude::{self as serenity, Mention};
 use std::time::Duration;
@@ -58,7 +58,8 @@ async fn status(ctx: Context<'_>) -> Result<(), Error> {
 async fn start(ctx: Context<'_>) -> Result<(), Error> {
     info!("start command called");
     ctx.defer().await?;
-    if docker::get_palworld_docker_container(None).await.is_ok() {
+    let container = docker::get_palworld_docker_container(None).await?;
+    if container.is_running() {
         ctx.say("Server is already running").await?;
     } else {
         let res = docker::start_docker_container().await;

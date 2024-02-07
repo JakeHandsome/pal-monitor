@@ -6,11 +6,11 @@ and stopping the server though a discord bot.
 
 ```yaml
 services:
-    pal-monitor:
-        image: ghcr.io/jakehandsome/pal-monitor:master
-        container_name: pal-monitor
-        environment:
-         - DISCORD_TOKEN=YourTokenHere
-        -volumes:
-         - /var/run/docker.sock:/var/run/docker.sock # Pass docker socket into container to it can control the other container
+  pal-monitor:
+    image: ghcr.io/jakehandsome/pal-monitor:master
+    container_name: pal-monitor
+    environment:
+     - DISCORD_TOKEN=YourTokenHere
+    volumes:
+     - /var/run/docker.sock:/var/run/docker.sock # Pass docker socket into container to it can control the other container
 ```

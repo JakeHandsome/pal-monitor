@@ -117,7 +117,7 @@ where
     }
 }
 
-trait ContainerIsRunning {
+pub trait ContainerIsRunning {
     fn is_running(&self) -> bool;
 }
 
