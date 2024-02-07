@@ -1,4 +1,4 @@
-use crate::docker::{self, get_palworld_docker_container, ContainerIsRunning};
+use crate::docker::{self, ContainerIsRunning};
 use anyhow::Result;
 use poise::serenity_prelude::{self as serenity, Mention};
 use std::time::Duration;
@@ -11,12 +11,7 @@ pub async fn create_client(discord_token: &str) -> Result<serenity::Client> {
     let intents = serenity::GatewayIntents::non_privileged();
     let framework = poise::Framework::builder()
         .options(poise::FrameworkOptions {
-            commands: vec![
-                status(),
-                start(),
-                stop(),
-                //    save()
-            ],
+            commands: vec![status(), start(), stop(), save()],
             ..Default::default()
         })
         .setup(|ctx, _ready, framework| {
@@ -104,7 +99,7 @@ async fn stop(ctx: Context<'_>) -> Result<(), Error> {
                 .await?;
         }
     } else {
-        ctx.say("Server is already offline").await?;
+        ctx.say("Server is not running").await?;
     }
     Ok(())
 }
@@ -114,11 +109,15 @@ async fn stop(ctx: Context<'_>) -> Result<(), Error> {
 async fn save(ctx: Context<'_>) -> Result<(), Error> {
     info!("save command called");
     ctx.defer().await?;
-    if (docker::get_players().await).is_ok() {
+
+    let server_running = docker::get_palworld_docker_container(None)
+        .await?
+        .is_running();
+    if server_running {
         let backup = docker::exec_command(vec!["backup"]).await?;
         ctx.say(format!("backup completed\n{backup}")).await?;
     } else {
-        ctx.say("Server is offline").await?;
+        ctx.say("Server is not running").await?;
     }
     Ok(())
 }
