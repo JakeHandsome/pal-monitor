@@ -81,7 +81,7 @@ pub async fn run_rcon_command(mut command: Vec<&str>) -> Result<String> {
         Ok(res)
     }
 }
-async fn exec_command<T>(command: Vec<T>) -> Result<String>
+pub async fn exec_command<T>(command: Vec<T>) -> Result<String>
 where
     T: Into<String> + Serialize + Default,
 {

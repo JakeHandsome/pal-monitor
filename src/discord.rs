@@ -91,6 +91,8 @@ async fn stop(ctx: Context<'_>) -> Result<(), Error> {
                 .await?;
         } else {
             ctx.say("Server shutting down").await?;
+            let backup = docker::exec_command(vec!["backup"]).await?;
+            ctx.say(backup.to_string()).await?;
             docker::stop_docker_container().await?;
             while docker::run_rcon_command(vec!["info"]).await.is_ok() {
                 tokio::time::sleep(Duration::from_secs(1)).await;
