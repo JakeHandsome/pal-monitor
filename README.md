@@ -7,7 +7,7 @@ and stopping the server though a discord bot.
 ```yaml
 services:
     pal-monitor:
-        image: todo # TODO
+        image: ghcr.io/jakehandsome/pal-monitor:master
         container_name: pal-monitor
         environment:
          - DISCORD_TOKEN=YourTokenHere
