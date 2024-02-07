@@ -106,23 +106,17 @@ async fn stop(ctx: Context<'_>) -> Result<(), Error> {
     }
     Ok(())
 }
-/*
 
-/// Saves the game
+/// Saves the game and makes a backup
 #[poise::command(prefix_command, slash_command)]
 async fn save(ctx: Context<'_>) -> Result<(), Error> {
     info!("save command called");
     ctx.defer().await?;
-    let mut ses = create_ssh_session(&ctx.data().ip, &ctx.data().password)?;
-
-    let is_fully_running = is_docker_running(&mut ses)? && is_server_responding(&mut ses)?;
-
-    if is_fully_running {
-        let result = save_server(&mut ses)?;
-        ctx.say(result).await?;
+    if (docker::get_players().await).is_ok() {
+        let backup = docker::exec_command(vec!["backup"]).await?;
+        ctx.say(format!("backup completed\n{backup}")).await?;
     } else {
         ctx.say("Server is offline").await?;
     }
     Ok(())
 }
-*/
